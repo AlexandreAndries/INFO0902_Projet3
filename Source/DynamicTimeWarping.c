@@ -111,7 +111,8 @@ static double min(size_t length, ...){
 
 
 double dtw(Sketch sketch1, Sketch sketch2, double maxDistance) {
-  // A completer
+  // A optimiser !!!
+
   size_t n = sketch1.size ;
   size_t m = sketch2.size ;
 
@@ -121,16 +122,19 @@ double dtw(Sketch sketch1, Sketch sketch2, double maxDistance) {
 
   for(size_t i = 0; i < n ; i++){
     for(size_t j = 0; j < m; j++){
-      DTWmtx[i][j] = (double)INFINITY ;
+        DTWmtx[i][j] = (double)INFINITY ;
     }
   }
   DTWmtx[0][0] = 0;
 
-  // for(size_t i = 1; i < n ; i++){
-  //   for(size_t j = ?? ; j < ?? ; j++){
-  //
-  //   }
-  // }
+  for(size_t i = 1; i < n ; i++){
+    for(size_t j = 1 ; j < m ; j++){
+        double dist = d(sketch1.points[i], sketch2.points[j]);
+        DTWmtx[i][j] = dist + min(3, DTWmtx[i-1][j],
+                                     DTWmtx[i][j-1],
+                                     DTWmtx[i-1][j-1]);
+    }
+  }
 
 
   return DTWmtx[n][m] ;
