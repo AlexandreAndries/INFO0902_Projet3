@@ -196,7 +196,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (index >= 0) { 
+    if (index >= 0) {
       /* ---------------- Single nearest neighbours search ------------------*/
       index %= testingset->size;  // to make sure we are in the range
 
@@ -223,11 +223,11 @@ int main(int argc, char *argv[]) {
 			*(neighbours[i].sketch),
 			neighbours[i].distance);
       }
-    
+
       if (output_path) {
 	char buffer[256];
 	sprintf(buffer, "%s/query.ppm", output_path);
-	sketch2ppm(testingset->sketches[index], buffer); 
+	sketch2ppm(testingset->sketches[index], buffer);
       }
       freeAll(trainingset, testingset, neighbours);
     } else {
@@ -254,10 +254,9 @@ int main(int argc, char *argv[]) {
       printf("\nError rate on the testing database: %.2f(%%) (%zu examples misclassified)\n",
 	     (float)nbErrors/testingset->size*100, nbErrors);
       printf("Error rate computed in %f seconds.\n", elapsed(start));
-      
-      freeAll(trainingset, testingset, NULL);      
+
+      freeAll(trainingset, testingset, NULL);
     }
 
     return EXIT_SUCCESS;
 }
-

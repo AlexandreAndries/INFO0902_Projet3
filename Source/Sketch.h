@@ -80,4 +80,3 @@ void sketch2ppm(Sketch sk, const char* filename);
 const char *getClassName(int class);
 
 #endif // SKETCH_H_DEFINED
-
