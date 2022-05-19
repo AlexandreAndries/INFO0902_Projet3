@@ -1,37 +1,119 @@
 #include "BoundedPriorityQueue.h"
+#include <stdlib.h>
 
 struct bounded_priority_queue_t {
-  // A completer
+    size_t capacity ;
+    size_t size ;
+    double *keys ;
+    size_t *data ;
 };
 
+/*============================================================================*/
+/*============================== STATIC FUNCTIONS ============================*/
+/*============================================================================*/
+// T(n) = O(1)
+static void swap(double *a, double *b){
+    double tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+/* ========================================================================== */
+// T(n) = O(log n)
+static void maxHeapify(double *array, size_t n, size_t i){
+    size_t left, right, largest;
+    largest = i;
+    left = 2 * i + 1;
+    right = 2 * i + 2;
+
+    // Check if left child exists and is larger than its parent
+    if (left < n && array[left] > array[largest])
+        largest = left;
+    // Check if right child exists and larger than its parent
+    if (right < n && array[right] > array[largest])
+        largest = right;
+
+    // if root is not the largest
+    if (largest != i) {
+        swap(&array[i], &array[largest]); //make root the largest
+        maxHeapify(array, n, largest); // Apply heapify to the largest node
+    }
+}
+/*============================================================================*/
+/*================================ FUNCTIONS =================================*/
+/*============================================================================*/
 BoundedPriorityQueue* bpqCreate(size_t capacity) {
-  // A completer
-}
+    BoundedPriorityQueue *bpq = (BoundedPriorityQueue*)malloc(sizeof(BoundedPriorityQueue));
+    if(!bpq)
+        return NULL;
 
+    bpq->keys = (double*)malloc(capacity*sizeof(double));
+    if(!bpq->keys){
+        free(bpq);
+        return NULL;
+    }
+
+    bpq->data = (size_t*)malloc(capacity*sizeof(double));
+    if(!bpq->data){
+        free(bpq->data);
+        free(bpq);
+        return NULL;
+    }
+
+    bpq->size = 0 ;
+    bpq->capacity = capacity ;
+
+    return bpq ;
+}
+/* ========================================================================== */
 void bpqFree(BoundedPriorityQueue* bpq) {
-  // A completer
+    free(bpq->data);
+    free(bpq->keys);
+    free(bpq);
 }
-
+/* ========================================================================== */
+// T(n) = O(log n)
 bool bpqInsert(BoundedPriorityQueue* bpq, double key, size_t value) {
-  // A completer
-}
+    if(bpq->size >= bpq->capacity)
+        return false;
 
+    size_t i = bpq->size ;
+    bpq->size++ ;
+
+    bpq->keys[i] = key ;
+    bpq->data[i] = value ;
+
+    while(i > 0 && bpq->keys[i/2] < bpq->keys[i]){
+        size_t parent_i = i/2 ;
+        swap(&bpq->keys[i], &bpq->keys[parent_i]);
+        swap((double*)&bpq->data[i], (double*)&bpq->data[parent_i]);
+        i = parent_i ;
+    }
+
+    return true;
+}
+/* ========================================================================== */
+// T(n) = O(1)
 void bpqReplaceMaximum(BoundedPriorityQueue* bpq, double key, size_t value) {
-  // A completer
+    // A completer
 }
-
+/* ========================================================================== */
+// T(n) = O(1)
 double bpqMaximumKey(const BoundedPriorityQueue* bpq) {
-  // A completer
-} 
-
+    return bpq->keys[0];
+}
+/* ========================================================================== */
+// T(n) = O(1)
 size_t* bpqGetItems(const BoundedPriorityQueue* bpq) {
-  // A completer
+    return bpq->data ;
 }
-
+/* ========================================================================== */
+// T(n) = O(1)
 size_t bpqSize(const BoundedPriorityQueue* bpq) {
-  // A completer
+    return bpq->size ;
 }
-
+/* ========================================================================== */
+// T(n) = O(1)
 size_t bpqCapacity(const BoundedPriorityQueue* bpq) {
-  // A completer
+    return bpq->capacity;
 }
+/* ========================================================================== */

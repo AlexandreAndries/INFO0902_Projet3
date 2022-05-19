@@ -60,35 +60,54 @@
 // }
 
 
-static double maxi(size_t length, ...){
+// static double maxi(size_t length, ...){
+//
+//   va_list valist;
+//   va_start(valist, length);
+//   double MAX = va_arg(valist, double);
+//
+//   for(size_t i = 1; i < length; i++){
+//       double tmp = va_arg(valist, double);
+//
+//       if(tmp > MAX)
+//           MAX = tmp ;
+//   }
+//
+//   va_end(valist);
+//   return MAX;
+// }
 
-  va_list valist;
-  va_start(valist, length);
-  double MAX = va_arg(valist, double);
-
-  for(size_t i = 1; i < length; i++){
-      double tmp = va_arg(valist, double);
-
-      if(tmp > MAX)
-          MAX = tmp ;
-  }
-
-  va_end(valist);
-  return MAX;
+static void swap(double *a, double *b){
+    double tmp = *a;
+    *a = *b;
+    *b = tmp;
 }
-
-
 
 
 
 
 int main(){
 
-  double MAX = maxi(6,2.0,5.02,7.0,91.05,3.0,10.0);
-  double MAX2 = maxi(6,2.0,5.02,7.0,9.0,3.0,10.0);
-  double MAX3 = maxi(6,200.058,57.02,7.0,9.0,3.0,10.00902);
-  printf("max is : %lf \n", MAX);
-  printf("max is : %lf \n", MAX2);
-  printf("max is : %lf \n", MAX3);
+  // double MAX = maxi(6,2.0,5.02,7.0,91.05,3.0,10.0);
+  // double MAX2 = maxi(6,2.0,5.02,7.0,9.0,3.0,10.0);
+  // double MAX3 = maxi(6,200.058,57.02,7.0,9.0,3.0,10.00902);
+  // printf("max is : %lf \n", MAX);
+  // printf("max is : %lf \n", MAX2);
+  // printf("max is : %lf \n", MAX3);
+
+  const unsigned short n = 11 ;
+  size_t array[11] = {0,1,2,3,4,5,6,7,8,9,10} ;
+
+  for(unsigned short i = 0 ; i < n ; i++){
+    printf("%lu ", array[i]);
+  }
+  printf("\n");
+
+  swap((double*)&array[0], (double*)&array[4]);
+  for(unsigned short i = 0 ; i < n ; i++){
+    printf("%lu ", array[i]);
+  }
+  printf("\n");
+
   return 0;
 }

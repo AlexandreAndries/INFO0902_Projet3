@@ -91,10 +91,6 @@ static double min(size_t length, ...){
 /*================================ FUNCTIONS =================================*/
 /*============================================================================*/
 
-
-
-
-
 // /* 2D point structure */
 // typedef struct point_t {
 //     int x, y;                // Coordinates of the point
@@ -136,6 +132,5 @@ double dtw(Sketch sketch1, Sketch sketch2, double maxDistance) {
     }
   }
 
-
-  return DTWmtx[n][m] ;
+  return DTWmtx[n-1][m-1] ;
 }
