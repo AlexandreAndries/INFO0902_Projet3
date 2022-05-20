@@ -21,12 +21,12 @@
  *
  * ------------------------------------------------------------------------- */
 static double d(Point p1, Point p2){
-  double x1 = (double)p1.x ;
-  double y1 = (double)p1.y ;
-  double x2 = (double)p2.x ;
-  double y2 = (double)p2.y ;
+    double x1 = (double)p1.x ;
+    double y1 = (double)p1.y ;
+    double x2 = (double)p2.x ;
+    double y2 = (double)p2.y ;
 
-  return 0.5*(fabs(x1 - x2)+fabs(y1 - y2)) ;
+    return 0.5*(fabs(x1 - x2)+fabs(y1 - y2)) ;
 }
 /* ========================================================================== */
 /** ------------------------------------------------------------------------ *
@@ -43,20 +43,20 @@ static double d(Point p1, Point p2){
  * ------------------------------------------------------------------------- */
 static double min(size_t length, ...){
 
-  va_list valist;
-  va_start(valist, length);
-  double MIN = va_arg(valist, double);
+    va_list valist;
+    va_start(valist, length);
+    double MIN = va_arg(valist, double);
 
-  for(size_t i = 1; i < length; i++){
-      double tmp = va_arg(valist, double);
+    for(size_t i = 1; i < length; i++){
+        double tmp = va_arg(valist, double);
 
-      if(tmp < MIN)
-          MIN = tmp ;
-  }
+        if(tmp < MIN)
+            MIN = tmp ;
+    }
 
-  va_end(valist);
+    va_end(valist);
 
-  return MIN;
+    return MIN;
 }
 /*============================================================================*/
 /*================================ FUNCTIONS =================================*/
@@ -78,30 +78,38 @@ static double min(size_t length, ...){
 
 
 double dtw(Sketch sketch1, Sketch sketch2, double maxDistance) {
-  // A optimiser !!!
+    // A optimiser !!!
 
-  size_t n = sketch1.size ;
-  size_t m = sketch2.size ;
+    size_t n = sketch1.size ;
+    size_t m = sketch2.size ;
+    double result ;
 
-  double **DTWmtx = (double**)malloc(n*sizeof(double*));
-  for(size_t i = 0; i < n; i++)
-      DTWmtx[i] = (double*)malloc(m*sizeof(double));
+    double **DTWmtx = (double**)malloc(n*sizeof(double*));
+    for(size_t i = 0; i < n; i++)
+        DTWmtx[i] = (double*)malloc(m*sizeof(double));
 
-  for(size_t i = 0; i < n ; i++){
-    for(size_t j = 0; j < m; j++){
-        DTWmtx[i][j] = (double)INFINITY ;
+    for(size_t i = 0; i < n ; i++){
+      for(size_t j = 0; j < m; j++){
+          DTWmtx[i][j] = (double)INFINITY ;
+      }
     }
-  }
-  DTWmtx[0][0] = 0;
+    DTWmtx[0][0] = 0;
 
-  for(size_t i = 1; i < n ; i++){
-    for(size_t j = 1 ; j < m ; j++){
-        double dist = d(sketch1.points[i], sketch2.points[j]);
-        DTWmtx[i][j] = dist + min(3, DTWmtx[i-1][j],
-                                     DTWmtx[i][j-1],
-                                     DTWmtx[i-1][j-1]);
+    for(size_t i = 1; i < n ; i++){
+      for(size_t j = 1 ; j < m ; j++){
+          double dist = d(sketch1.points[i], sketch2.points[j]);
+          DTWmtx[i][j] = dist + min(3, DTWmtx[i-1][j],
+                                       DTWmtx[i][j-1],
+                                       DTWmtx[i-1][j-1]);
+      }
     }
-  }
 
-  return DTWmtx[n-1][m-1] ;
+    result  = DTWmtx[n-1][m-1] ;
+    
+    for(int i = n - 1; i >= 0; i--){
+      free(DTWmtx[i]);
+    }
+    free(DTWmtx);
+
+    return result ;
 }

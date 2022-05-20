@@ -11,6 +11,17 @@ struct bounded_priority_queue_t {
 /*============================================================================*/
 /*============================== STATIC FUNCTIONS ============================*/
 /*============================================================================*/
+/* ------------------------------------------------------------------------- *
+ *  swapVariable
+ *  The elements have been switched
+ *
+ *  PARAMETERS
+ *  a       element to swap
+ *  b       element to swap
+ *
+ *  RETURN
+ *  /
+ * ------------------------------------------------------------------------- */
 // T(n) = O(1)
 static void swap(double *a, double *b){
     double tmp = *a;
@@ -18,26 +29,40 @@ static void swap(double *a, double *b){
     *b = tmp;
 }
 /* ========================================================================== */
+/* ------------------------------------------------------------------------- *
+ *  maxHeapify
+ *  Changing the addresses in the list from largest to smallest in the bi-tree
+ *
+ *  PARAMETERS
+ *  keys        keys...
+ *  data        ... and their associated values
+ *  size        heap-size
+ *  i           index with the largest value
+ *
+ *  RETURN
+ *  /
+ * ------------------------------------------------------------------------- */
 // T(n) = O(log n)
-// static void maxHeapify(double *array, size_t n, size_t i){
-//     size_t left, right, largest;
-//     largest = i;
-//     left = 2 * i + 1;
-//     right = 2 * i + 2;
-//
-//     // Check if left child exists and is larger than its parent
-//     if (left < n && array[left] > array[largest])
-//         largest = left;
-//     // Check if right child exists and larger than its parent
-//     if (right < n && array[right] > array[largest])
-//         largest = right;
-//
-//     // if root is not the largest
-//     if (largest != i) {
-//         swap(&array[i], &array[largest]); //make root the largest
-//         maxHeapify(array, n, largest); // Apply heapify to the largest node
-//     }
-// }
+static void maxHeapify(double *keys, size_t *data, size_t size, size_t i){
+    size_t left, right, largest;
+    largest = i;
+    left = 2 * i + 1;
+    right = 2 * i + 2;
+
+    // Check if left child exists and is larger than its parent
+    if (left < size && keys[left] > keys[largest])
+        largest = left;
+    // Check if right child exists and larger than its parent
+    if (right < size && keys[right] > keys[largest])
+        largest = right;
+
+    // if root is not the largest
+    if (largest != i) {
+        swap(&keys[i], &keys[largest]); //make root the largest
+        swap((double*)&data[i], (double*)&data[largest]);
+        maxHeapify(keys, data, size, largest); // Apply heapify to the largest node
+    }
+}
 /*============================================================================*/
 /*================================ FUNCTIONS =================================*/
 /*============================================================================*/
@@ -52,9 +77,9 @@ BoundedPriorityQueue* bpqCreate(size_t capacity) {
         return NULL;
     }
 
-    bpq->data = (size_t*)malloc(capacity*sizeof(double));
+    bpq->data = (size_t*)malloc(capacity*sizeof(size_t));
     if(!bpq->data){
-        free(bpq->data);
+        free(bpq->keys);
         free(bpq);
         return NULL;
     }
@@ -100,7 +125,8 @@ void bpqReplaceMaximum(BoundedPriorityQueue* bpq, double key, size_t value) {
     bpq->keys[0] = key ;
     bpq->data[0] = value ;
 
-
+    if(bpq->size > 1)
+        maxHeapify(bpq->keys, bpq->data, bpq->size, 0);
 }
 /* ========================================================================== */
 // T(n) = O(1)
