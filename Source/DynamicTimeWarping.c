@@ -2,6 +2,7 @@
 #include "DynamicTimeWarping.h"
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdarg.h>
 
 /*============================================================================*/
@@ -26,36 +27,6 @@ static double d(Point p1, Point p2){
   double y2 = (double)p2.y ;
 
   return 0.5*(fabs(x1 - x2)+fabs(y1 - y2)) ;
-}
-/* ========================================================================== */
-/** ------------------------------------------------------------------------ *
- * Returns the maximum in a series of inputs (the number of inputs can vary)
- *
- * PARAMETERS
- * length       The number of inputs.
- * ...          The ellipsis () containing the inputs.
- *
- *
- * RETURN
- * max          The maximum element from the series of inputs.
- *
- * ------------------------------------------------------------------------- */
-static double max(size_t length, ...){
-
-  va_list valist;
-  va_start(valist, length);
-  double MAX = va_arg(valist, double);
-
-  for(size_t i = 1; i < length; i++){
-      double tmp = va_arg(valist, double);
-
-      if(tmp > MAX)
-          MAX = tmp ;
-  }
-
-  va_end(valist);
-
-  return MAX;
 }
 /* ========================================================================== */
 /** ------------------------------------------------------------------------ *

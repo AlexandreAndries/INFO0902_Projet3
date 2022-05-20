@@ -46,7 +46,6 @@ void bpqFree(BoundedPriorityQueue* bpq);
  * ------------------------------------------------------------------------- */
 bool bpqInsert(BoundedPriorityQueue* bpq, double key, size_t value);
 
-
 /* ------------------------------------------------------------------------- *
  * Replace the element with maximum key with a new key/value pair. The queue
  * must contain at least one element (otherwise calling the function results in

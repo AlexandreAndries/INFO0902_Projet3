@@ -19,25 +19,25 @@ static void swap(double *a, double *b){
 }
 /* ========================================================================== */
 // T(n) = O(log n)
-static void maxHeapify(double *array, size_t n, size_t i){
-    size_t left, right, largest;
-    largest = i;
-    left = 2 * i + 1;
-    right = 2 * i + 2;
-
-    // Check if left child exists and is larger than its parent
-    if (left < n && array[left] > array[largest])
-        largest = left;
-    // Check if right child exists and larger than its parent
-    if (right < n && array[right] > array[largest])
-        largest = right;
-
-    // if root is not the largest
-    if (largest != i) {
-        swap(&array[i], &array[largest]); //make root the largest
-        maxHeapify(array, n, largest); // Apply heapify to the largest node
-    }
-}
+// static void maxHeapify(double *array, size_t n, size_t i){
+//     size_t left, right, largest;
+//     largest = i;
+//     left = 2 * i + 1;
+//     right = 2 * i + 2;
+//
+//     // Check if left child exists and is larger than its parent
+//     if (left < n && array[left] > array[largest])
+//         largest = left;
+//     // Check if right child exists and larger than its parent
+//     if (right < n && array[right] > array[largest])
+//         largest = right;
+//
+//     // if root is not the largest
+//     if (largest != i) {
+//         swap(&array[i], &array[largest]); //make root the largest
+//         maxHeapify(array, n, largest); // Apply heapify to the largest node
+//     }
+// }
 /*============================================================================*/
 /*================================ FUNCTIONS =================================*/
 /*============================================================================*/
@@ -94,7 +94,13 @@ bool bpqInsert(BoundedPriorityQueue* bpq, double key, size_t value) {
 /* ========================================================================== */
 // T(n) = O(1)
 void bpqReplaceMaximum(BoundedPriorityQueue* bpq, double key, size_t value) {
-    // A completer
+    if(bpq->size < 1)
+        return ;
+
+    bpq->keys[0] = key ;
+    bpq->data[0] = value ;
+
+
 }
 /* ========================================================================== */
 // T(n) = O(1)
