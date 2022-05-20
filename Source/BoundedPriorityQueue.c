@@ -117,15 +117,25 @@ bool bpqInsert(BoundedPriorityQueue* bpq, double key, size_t value) {
     return true;
 }
 /* ========================================================================== */
-// T(n) = O(1)
+// T(n) = O(log n)
 void bpqReplaceMaximum(BoundedPriorityQueue* bpq, double key, size_t value) {
-    if(bpq->size < 1)
+    size_t n = bpq->size ;
+    if(n < 1)
         return ;
 
     bpq->keys[0] = key ;
     bpq->data[0] = value ;
 
-    if(bpq->size > 1)
+    // if(n > 1){
+    //     for (i = (n / 2) - 1; i >= 0; i--)
+    //         heapify(array, n, i);
+    //
+    //     for (i = n - 1; i >= 0; i--) {
+    //         swap(&array[0], &array[i]); //Move the largest element at root to the end
+    //         heapify(array, i, 0);       //Apply heapify to reduced heap
+    //     }
+    // }
+    if(n > 1)
         maxHeapify(bpq->keys, bpq->data, bpq->size, 0);
 }
 /* ========================================================================== */
