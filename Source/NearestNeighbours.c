@@ -24,6 +24,7 @@ SketchDistance* nearestNeighbours(const Dataset* dataset, Sketch query, size_t k
         if(DTWtmp < maxK)
             bpqReplaceMaximum(bpq, DTWtmp, j);
 
+        maxK = bpqMaximumKey(bpq);
         j++;
     }
 
