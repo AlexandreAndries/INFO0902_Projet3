@@ -102,17 +102,18 @@ bool bpqInsert(BoundedPriorityQueue* bpq, double key, size_t value) {
         return false;
 
     size_t i = bpq->size ;
-    bpq->size++ ;
 
     bpq->keys[i] = key ;
     bpq->data[i] = value ;
 
-    while(i > 0 && bpq->keys[i/2] < bpq->keys[i]){
-        size_t parent_i = i/2 ;
+    while(i > 0 && bpq->keys[(i-1)/2] < bpq->keys[i]){
+        size_t parent_i = (i-1)/2 ;
         swap(&bpq->keys[i], &bpq->keys[parent_i]);
         swap((double*)&bpq->data[i], (double*)&bpq->data[parent_i]);
         i = parent_i ;
     }
+
+    bpq->size++ ;
 
     return true;
 }
@@ -126,15 +127,6 @@ void bpqReplaceMaximum(BoundedPriorityQueue* bpq, double key, size_t value) {
     bpq->keys[0] = key ;
     bpq->data[0] = value ;
 
-    // if(n > 1){
-    //     for (i = (n / 2) - 1; i >= 0; i--)
-    //         heapify(array, n, i);
-    //
-    //     for (i = n - 1; i >= 0; i--) {
-    //         swap(&array[0], &array[i]); //Move the largest element at root to the end
-    //         heapify(array, i, 0);       //Apply heapify to reduced heap
-    //     }
-    // }
     if(n > 1)
         maxHeapify(bpq->keys, bpq->data, bpq->size, 0);
 }
@@ -146,7 +138,7 @@ double bpqMaximumKey(const BoundedPriorityQueue* bpq) {
 /* ========================================================================== */
 // T(n) = O(1)
 size_t* bpqGetItems(const BoundedPriorityQueue* bpq) {
-    return bpq->data ;
+    return &bpq->data[0] ;
 }
 /* ========================================================================== */
 // T(n) = O(1)

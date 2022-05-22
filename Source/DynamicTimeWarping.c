@@ -61,55 +61,37 @@ static double min(size_t length, ...){
 /*============================================================================*/
 /*================================ FUNCTIONS =================================*/
 /*============================================================================*/
-
-// /* 2D point structure */
-// typedef struct point_t {
-//     int x, y;                // Coordinates of the point
-// } Point;
-//
-// /* Sketch structure */
-// typedef struct sketch_t {
-//     int class;               // The class of this sketch
-//     size_t size;             // The number of points of this sketch
-//     bool* strokeStarts;      // strokeStarts[i] == 1 iff points[i] is the start
-//                                                          // of a new polyline
-//     Point* points;           // The array of points of this sketch
-// } Sketch;
-
-
 double dtw(Sketch sketch1, Sketch sketch2, double maxDistance) {
-    // A optimiser !!!
 
     size_t n = sketch1.size ;
     size_t m = sketch2.size ;
-    double result ;
 
-    double **DTWmtx = (double**)malloc(n*sizeof(double*));
-    for(size_t i = 0; i < n; i++)
-        DTWmtx[i] = (double*)malloc(m*sizeof(double));
+    double DTWmtx[n][m] ;
 
     for(size_t i = 0; i < n ; i++){
-      for(size_t j = 0; j < m; j++){
-          DTWmtx[i][j] = (double)INFINITY ;
-      }
+        for(size_t j = 0; j < m; j++){
+            DTWmtx[i][j] = (double)INFINITY ;
+        }
     }
     DTWmtx[0][0] = 0;
 
-    for(size_t i = 1; i < n ; i++){
-      for(size_t j = 1 ; j < m ; j++){
-          double dist = d(sketch1.points[i], sketch2.points[j]);
-          DTWmtx[i][j] = dist + min(3, DTWmtx[i-1][j],
-                                       DTWmtx[i][j-1],
-                                       DTWmtx[i-1][j-1]);
-      }
+    for(size_t i = 1 ; i < n ; i++){
+        double currMin = INFINITY;
+
+        for(size_t j = 1 ; j < m ; j++){
+            double dist = d(sketch1.points[i], sketch2.points[j]);
+
+            DTWmtx[i][j] = dist + min(3, DTWmtx[i-1][j],
+                                         DTWmtx[i][j-1],
+                                         DTWmtx[i-1][j-1]);
+
+            currMin = min(2, currMin, DTWmtx[i][j]);
+        }
+
+        if(currMin > maxDistance)
+            return INFINITY;
     }
 
-    result  = DTWmtx[n-1][m-1] ;
-    
-    for(int i = n - 1; i >= 0; i--){
-      free(DTWmtx[i]);
-    }
-    free(DTWmtx);
+    return DTWmtx[n-1][m-1] ;
 
-    return result ;
 }
