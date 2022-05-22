@@ -12,6 +12,21 @@ struct bounded_priority_queue_t {
 /*============================== STATIC FUNCTIONS ============================*/
 /*============================================================================*/
 /* ------------------------------------------------------------------------- *
+ *  parent
+ *  returns the parent of the argument
+ *
+ *  PARAMETERS
+ *  i       child whose parent we are searching for
+ *
+ *  RETURN
+ *  the parent of i
+ * ------------------------------------------------------------------------- */
+// T(n) = O(1)
+static size_t parent(size_t i){
+  return (i-1)/2;
+}
+/* ========================================================================== */
+/* ------------------------------------------------------------------------- *
  *  swapVariable
  *  The elements have been switched
  *
@@ -23,8 +38,14 @@ struct bounded_priority_queue_t {
  *  /
  * ------------------------------------------------------------------------- */
 // T(n) = O(1)
-static void swap(double *a, double *b){
+static void swap_double(double *a, double *b){
     double tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+static void swap_int(size_t *a, size_t *b){
+    size_t tmp = *a;
     *a = *b;
     *b = tmp;
 }
@@ -58,8 +79,8 @@ static void maxHeapify(double *keys, size_t *data, size_t size, size_t i){
 
     // if root is not the largest
     if (largest != i) {
-        swap(&keys[i], &keys[largest]); //make root the largest
-        swap((double*)&data[i], (double*)&data[largest]);
+        swap_double(&keys[i], &keys[largest]); //make root the largest
+        swap_int(&data[i], &data[largest]);
         maxHeapify(keys, data, size, largest); // Apply heapify to the largest node
     }
 }
@@ -106,11 +127,10 @@ bool bpqInsert(BoundedPriorityQueue* bpq, double key, size_t value) {
     bpq->keys[i] = key ;
     bpq->data[i] = value ;
 
-    while(i > 0 && bpq->keys[(i-1)/2] < bpq->keys[i]){
-        size_t parent_i = (i-1)/2 ;
-        swap(&bpq->keys[i], &bpq->keys[parent_i]);
-        swap((double*)&bpq->data[i], (double*)&bpq->data[parent_i]);
-        i = parent_i ;
+    while(i > 0 && bpq->keys[parent(i)] < bpq->keys[i]){
+        swap_double(&bpq->keys[i], &bpq->keys[parent(i)]);
+        swap_int(&bpq->data[i], &bpq->data[parent(i)]);
+        i = parent(i) ;
     }
 
     bpq->size++ ;
@@ -138,7 +158,16 @@ double bpqMaximumKey(const BoundedPriorityQueue* bpq) {
 /* ========================================================================== */
 // T(n) = O(1)
 size_t* bpqGetItems(const BoundedPriorityQueue* bpq) {
-    return &bpq->data[0] ;
+    if(!bpq->size)
+        return NULL;
+
+    size_t *items = (size_t*)malloc(bpq->size*sizeof(size_t));
+
+    for(size_t i = 0; i < bpq->size; i++){
+        items[i] = bpq->data[i];
+    }
+
+    return items;
 }
 /* ========================================================================== */
 // T(n) = O(1)

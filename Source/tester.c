@@ -8,13 +8,24 @@ int main(void){
     printf("bpq created\n");
 
 
-    for(size_t i = 1 ; i < cap+3 ; i++){
-        bool ret = bpqInsert(bpq, i, i);
-        printf("%d\n", ret);
-    }
+    bpqInsert(bpq, 1, 1);
+    bpqInsert(bpq, 4, 4);
+    bpqInsert(bpq, 2, 2);
+    bpqInsert(bpq, 3, 3);
+    bpqInsert(bpq, 9, 9);
+    bpqInsert(bpq, 7, 7);
+    bpqInsert(bpq, 8, 8);
+    bpqInsert(bpq, 10, 10);
+    bpqInsert(bpq, 14, 14);
+    bpqInsert(bpq, 16, 16);
 
+    size_t *it = bpqGetItems(bpq);
 
     printf("inserted\n");
+    for(size_t i = 0; i < cap; i++){
+      printf("%lu ", it[i]);
+    }
+    printf("\n\n");
 
 
     bpqReplaceMaximum(bpq, 1.05, 56);
