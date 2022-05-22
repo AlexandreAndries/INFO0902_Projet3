@@ -70,18 +70,16 @@ static void maxHeapify(double *keys, size_t *data, size_t size, size_t i){
     left = 2 * i + 1;
     right = 2 * i + 2;
 
-    // Check if left child exists and is larger than its parent
     if (left < size && keys[left] > keys[largest])
         largest = left;
-    // Check if right child exists and larger than its parent
+
     if (right < size && keys[right] > keys[largest])
         largest = right;
 
-    // if root is not the largest
     if (largest != i) {
-        swap_double(&keys[i], &keys[largest]); //make root the largest
+        swap_double(&keys[i], &keys[largest]);
         swap_int(&data[i], &data[largest]);
-        maxHeapify(keys, data, size, largest); // Apply heapify to the largest node
+        maxHeapify(keys, data, size, largest);
     }
 }
 /*============================================================================*/
